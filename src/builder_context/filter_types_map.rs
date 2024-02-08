@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use async_graphql::dynamic::{InputObject, InputValue, ObjectAccessor, TypeRef};
-use sea_orm::{ColumnTrait, ColumnType, Condition, EntityTrait};
+use sea_orm::{ColumnTrait, ColumnType, Condition, EntityTrait, Value};
 
 use crate::{
     prepare_enumeration_condition, ActiveEnumFilterInputBuilder, BuilderContext,
@@ -521,35 +521,65 @@ impl FilterTypesMapHelper {
                     if let Some(value) = filter.get("contains") {
                         let value = types_map_helper
                             .async_graphql_value_to_sea_orm_value::<T>(column, &value)?;
-                        condition = condition.add(column.contains(&value.to_string()));
+
+                        let str_val = match value {
+                            Value::String(s) => s,
+                            _ => panic!("not a string"),
+                        }.unwrap();
+
+                        condition = condition.add(column.contains(&str_val.to_string()));
                     }
                 }
                 FilterOperation::StartsWith => {
                     if let Some(value) = filter.get("starts_with") {
                         let value = types_map_helper
                             .async_graphql_value_to_sea_orm_value::<T>(column, &value)?;
-                        condition = condition.add(column.starts_with(&value.to_string()));
+
+                        let str_val = match value {
+                            Value::String(s) => s,
+                            _ => panic!("not a string"),
+                        }.unwrap();
+
+                        condition = condition.add(column.starts_with(&str_val.to_string()));
                     }
                 }
                 FilterOperation::EndsWith => {
                     if let Some(value) = filter.get("ends_with") {
                         let value = types_map_helper
                             .async_graphql_value_to_sea_orm_value::<T>(column, &value)?;
-                        condition = condition.add(column.ends_with(&value.to_string()));
+
+                        let str_val = match value {
+                            Value::String(s) => s,
+                            _ => panic!("not a string"),
+                        }.unwrap();
+
+                        condition = condition.add(column.ends_with(&str_val.to_string()));
                     }
                 }
                 FilterOperation::Like => {
                     if let Some(value) = filter.get("like") {
                         let value = types_map_helper
                             .async_graphql_value_to_sea_orm_value::<T>(column, &value)?;
-                        condition = condition.add(column.like(&value.to_string()));
+
+                        let str_val = match value {
+                            Value::String(s) => s,
+                            _ => panic!("not a string"),
+                        }.unwrap();
+
+                        condition = condition.add(column.like(&str_val.to_string()));
                     }
                 }
                 FilterOperation::NotLike => {
                     if let Some(value) = filter.get("not_like") {
                         let value = types_map_helper
                             .async_graphql_value_to_sea_orm_value::<T>(column, &value)?;
-                        condition = condition.add(column.not_like(&value.to_string()));
+
+                        let str_val = match value {
+                            Value::String(s) => s,
+                            _ => panic!("not a string"),
+                        }.unwrap();
+
+                        condition = condition.add(column.not_like(&str_val.to_string()));
                     }
                 }
                 FilterOperation::Between => {
