@@ -90,17 +90,11 @@ where
 
     let extract_variant = move |input: &str| -> String {
         let variant = variants.iter().find(|orm_variant| {
-            let orm_variant = orm_variant
-                .to_string();
+            let orm_variant = orm_variant.to_string();
 
-            let builder = ActiveEnumBuilder {
-                context,
-            };
+            let builder = ActiveEnumBuilder { context };
 
-            let gql_variant = builder.variant_name(
-                type_name,
-                &orm_variant,
-            );
+            let gql_variant = builder.variant_name(type_name, &orm_variant);
 
             gql_variant.eq(input)
         });
