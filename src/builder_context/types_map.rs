@@ -148,12 +148,13 @@ impl TypesMapHelper {
                 #[cfg(feature = "with-chrono")]
                 TimeLibrary::Chrono => ConvertedType::ChronoDate,
             },
-            ColumnType::Year(_) => ConvertedType::Integer,
+            ColumnType::Year => ConvertedType::Integer,
             ColumnType::Interval(_, _) => ConvertedType::String,
             ColumnType::Binary(_)
             | ColumnType::VarBinary(_)
             | ColumnType::Bit(_)
-            | ColumnType::VarBit(_) => ConvertedType::Bytes,
+            | ColumnType::VarBit(_)
+            | ColumnType::Blob => ConvertedType::Bytes,
             ColumnType::Boolean => ConvertedType::Bool,
 
             #[cfg(not(feature = "with-json"))]
@@ -264,12 +265,13 @@ impl TypesMapHelper {
             | ColumnType::TimestampWithTimeZone
             | ColumnType::Time
             | ColumnType::Date => Some(TypeRef::named(TypeRef::STRING)),
-            ColumnType::Year(_) => Some(TypeRef::named(TypeRef::INT)),
+            ColumnType::Year => Some(TypeRef::named(TypeRef::INT)),
             ColumnType::Interval(_, _) => Some(TypeRef::named(TypeRef::STRING)),
             ColumnType::Binary(_)
             | ColumnType::VarBinary(_)
             | ColumnType::Bit(_)
-            | ColumnType::VarBit(_) => Some(TypeRef::named(TypeRef::STRING)),
+            | ColumnType::VarBit(_)
+            | ColumnType::Blob => Some(TypeRef::named(TypeRef::STRING)),
             ColumnType::Boolean => Some(TypeRef::named(TypeRef::BOOLEAN)),
             // FIXME: support json type
             ColumnType::Json | ColumnType::JsonBinary => None,

@@ -206,12 +206,13 @@ impl FilterTypesMapHelper {
             ColumnType::TimestampWithTimeZone => Some(FilterType::Text),
             ColumnType::Time => Some(FilterType::Text),
             ColumnType::Date => Some(FilterType::Text),
-            ColumnType::Year(_) => Some(FilterType::Integer),
+            ColumnType::Year => Some(FilterType::Integer),
             ColumnType::Interval(_, _) => Some(FilterType::Text),
             ColumnType::Binary(_) => None,
             ColumnType::VarBinary(_) => None,
             ColumnType::Bit(_) => None,
             ColumnType::VarBit(_) => None,
+            ColumnType::Blob => None,
             ColumnType::Boolean => Some(FilterType::Boolean),
             ColumnType::Money(_) => Some(FilterType::Text),
             ColumnType::Json => None,
@@ -599,8 +600,8 @@ impl FilterTypesMapHelper {
                             })
                             .collect::<SeaResult<Vec<_>>>()?;
 
-                        let a = value.get(0).unwrap().clone();
-                        let b = value.get(1).unwrap().clone();
+                        let a = value[0].clone();
+                        let b = value[1].clone();
 
                         condition = condition.add(column.between(a, b));
                     }
@@ -616,8 +617,8 @@ impl FilterTypesMapHelper {
                             })
                             .collect::<SeaResult<Vec<_>>>()?;
 
-                        let a = value.get(0).unwrap().clone();
-                        let b = value.get(1).unwrap().clone();
+                        let a = value[0].clone();
+                        let b = value[1].clone();
 
                         condition = condition.add(column.not_between(a, b));
                     }

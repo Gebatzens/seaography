@@ -212,27 +212,6 @@ fn sea_query_value_to_graphql_value(
         sea_orm::Value::BigUnsigned(value) => value.map(Value::from),
         sea_orm::Value::Float(value) => value.map(Value::from),
         sea_orm::Value::Double(value) => value.map(Value::from),
-<<<<<<< HEAD
-        sea_orm::Value::String(value) if is_enum => {
-            value.map(|it| {
-                let builder = ActiveEnumBuilder {
-                    context,
-                };
-
-                let enum_name = match column_type {
-                    ColumnType::Enum { name, .. } => name.to_string(),
-                    _ => panic!("Expected enum column type"),
-                };
-
-                let gql_name = builder.variant_name(
-                    enum_name.as_str(),
-                    it.as_str()
-                );
-
-                Value::from(gql_name)
-            })
-        }
-=======
         sea_orm::Value::String(value) if is_enum => value.map(|it| {
             let builder = ActiveEnumBuilder { context };
 
@@ -245,7 +224,6 @@ fn sea_query_value_to_graphql_value(
 
             Value::from(gql_name)
         }),
->>>>>>> fix-enum-variant-names
         sea_orm::Value::String(value) => value.map(|it| Value::from(it.as_str())),
         sea_orm::Value::Char(value) => value.map(|it| Value::from(it.to_string())),
 
@@ -257,12 +235,8 @@ fn sea_query_value_to_graphql_value(
             Value::List(
                 it.into_iter()
                     .map(|item| {
-<<<<<<< HEAD
-                        sea_query_value_to_graphql_value(context, item, is_enum, column_type).unwrap_or(Value::Null)
-=======
                         sea_query_value_to_graphql_value(context, item, is_enum, column_type)
                             .unwrap_or(Value::Null)
->>>>>>> fix-enum-variant-names
                     })
                     .collect(),
             )
